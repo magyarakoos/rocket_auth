@@ -24,13 +24,13 @@ sqlx-mysql = ["sqlx/mysql"]
 
 
 [dependencies.rusqlite]
-version = "0.27.0"
+version = "0.32.1"
 optional = true
 
 
 [dependencies]
 rand = "0.8.5"
-rust-argon2 = "1.0.0"
+rust-argon2 = "2.1.0"
 lazy_static = "1.4.0"
 regex = "1.5.6"
 serde_json = "1.0.82"
@@ -39,17 +39,18 @@ thiserror = "1.0.31"
 async-trait = "0.1.56"
 fehler = "1.0.0"
 chrono = "0.4.19"
-validator = { version = "0.15.0", features = ["derive"] }
-futures= "0.3.21"
+validator = { version = "0.18.1", features = ["derive"] }
+futures = "0.3.21"
 
 
 [dependencies.sqlx]
-version = "0.6.0"
+version = "0.8.2"
+features = ["runtime-tokio", "tls-native-tls"]
 optional = true
 
 
 [dependencies.rocket]
-version = "0.5.0-rc.2"
+version = "0.5.1"
 features = ["secrets"]
 
 [dependencies.serde]
@@ -62,7 +63,7 @@ optional = true
 
 
 [dependencies.redis]
-version = "0.21.5"
+version = "0.27.4"
 features = ["aio", "tokio-comp"]
 optional = true
 
@@ -71,25 +72,25 @@ version = "1.19.2"
 features = ["rt", "rt-multi-thread"]
 
 [dev-dependencies]
-tokio-postgres= "0.7.6"
+tokio-postgres = "0.7.6"
 
 
 [dev-dependencies.rocket]
-version = "0.5.0-rc.2"
+version = "0.5.1"
 features = ["secrets", "json"]
 
 [dev-dependencies.redis]
-version = "0.21.5"
+version = "0.27.4"
 features = ["aio", "tokio-comp"]
 
 
 [dev-dependencies.rocket_dyn_templates]
-version = "0.1.0-rc.2"
+version = "0.2.0"
 features = ["tera"]
 
 
 [dev-dependencies.sqlx]
-version = "0.6.0"
+version = "0.8.2"
 features = ["runtime-tokio-rustls"]
 
 [dev-dependencies.rocket_auth]

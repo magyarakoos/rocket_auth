@@ -4,6 +4,7 @@ use super::rand_string;
 use crate::prelude::*;
 use rocket::http::Status;
 use rocket::request::{FromRequest, Outcome, Request};
+use validator::ValidateEmail;
 
 impl User {
     /// This method allows to reset the password of a user.
@@ -12,7 +13,7 @@ impl User {
     /// In case the user is authenticated,
     /// you can change it more easily with [`change_password`](`super::auth::Auth::change_password`).
     /// This function will fail in case the password is not secure enough.
-    /// 
+    ///
     /// ```rust
     /// # use rocket::{State, post};
     /// # use rocket_auth::{Error, Users};
@@ -85,7 +86,7 @@ impl User {
     /// ```
     #[throws(Error)]
     pub fn set_email(&mut self, email: &str) {
-        if validator::validate_email(email) {
+        if email.validate_email() {
             self.email = email.to_lowercase();
         } else {
             throw!(Error::InvalidEmailAddressError)
@@ -113,13 +114,13 @@ impl<'r> FromRequest<'r> for User {
         let guard = request.guard().await;
         let auth: Auth = match guard {
             Success(auth) => auth,
-            Failure(x) => return Failure(x),
+            Error(x) => return Error(x),
             Forward(x) => return Forward(x),
         };
         if let Some(user) = auth.get_user().await {
             Outcome::Success(user)
         } else {
-            Outcome::Failure((Status::Unauthorized, Error::UnauthorizedError))
+            Outcome::Error((Status::Unauthorized, Self::Error::UnauthorizedError))
         }
     }
 }
@@ -132,7 +133,7 @@ impl<'r> FromRequest<'r> for AdminUser {
         let guard = request.guard().await;
         let auth: Auth = match guard {
             Success(auth) => auth,
-            Failure(x) => return Failure(x),
+            Error(x) => return Error(x),
             Forward(x) => return Forward(x),
         };
         if let Some(user) = auth.get_user().await {
@@ -140,12 +141,12 @@ impl<'r> FromRequest<'r> for AdminUser {
                 return Outcome::Success(AdminUser(user));
             }
         }
-        Outcome::Failure((Status::Unauthorized, Error::UnauthorizedError))
+        Outcome::Error((Status::Unauthorized, Self::Error::UnauthorizedError))
     }
 }
 
-use std::ops::*;
 use argon2::verify_encoded;
+use std::ops::*;
 
 impl Deref for AdminUser {
     type Target = User;
