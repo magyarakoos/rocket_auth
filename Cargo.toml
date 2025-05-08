@@ -44,7 +44,7 @@ futures = "0.3.21"
 
 
 [dependencies.sqlx]
-version = "0.8.2"
+version = "0.7.4"
 features = ["runtime-tokio", "tls-native-tls"]
 optional = true
 
@@ -90,7 +90,7 @@ features = ["tera"]
 
 
 [dev-dependencies.sqlx]
-version = "0.8.2"
+version = "0.7.4"
 features = ["runtime-tokio-rustls"]
 
 [dev-dependencies.rocket_auth]
